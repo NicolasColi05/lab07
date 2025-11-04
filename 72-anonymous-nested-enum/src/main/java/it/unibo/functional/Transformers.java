@@ -32,6 +32,7 @@ public final class Transformers {
         final Iterable<? extends I> base,
         final Function<I, ? extends Collection<? extends O>> transformer
     ) {
+    
         final var result = new ArrayList<O>();
         for (final I input : Objects.requireNonNull(base, "The base iterable cannot be null")) {
             result.addAll(transformer.call(input));
