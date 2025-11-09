@@ -32,7 +32,6 @@ public final class Transformers {
         final Iterable<? extends I> base,
         final Function<I, ? extends Collection<? extends O>> transformer
     ) {
-    
         final var result = new ArrayList<O>();
         for (final I input : Objects.requireNonNull(base, "The base iterable cannot be null")) {
             result.addAll(transformer.call(input));
@@ -55,8 +54,14 @@ public final class Transformers {
      * @return A transformed list where each input element is replaced with the produced elements
      */
     public static <I, O> List<O> transform(final Iterable<I> base, final Function<I, O> transformer) {
-        return null;
+        final var result = new ArrayList<O>();
+        for (final I input : base) {
+            result.add(transformer.call(input));
+        }
+        return result;
     }
+    
+    
 
     /**
      * A function that takes an iterable of collections, and returns a flatten list of the elements of the inner
@@ -71,8 +76,15 @@ public final class Transformers {
      * @return A flattened list with the elements of each collection in the input
      */
     public static <I> List<? extends I> flatten(final Iterable<? extends Collection<? extends I>> base) {
-        return null;
+        final var result = new ArrayList<I>();
+        final var it = base.iterator();
+        while (it.hasNext()){
+            result.addAll(it.next());
+       }
+       return result;
     }
+        
+    
 
     /**
      * A function that applies a test to each element of an {@link Iterable}, returning a list containing only the
@@ -88,7 +100,14 @@ public final class Transformers {
      * @return A list containing only the elements that passed the test
      */
     public static <I> List<I> select(final Iterable<I> base, final Function<I, Boolean> test) {
-        return null;
+        final var result = new ArrayList<I>();
+        for (final I input : base) {
+           if(test.call(input)){
+            result.add(input);
+           }
+        }
+        return result;  
+
     }
 
     /**
@@ -104,6 +123,12 @@ public final class Transformers {
      * @return A list containing only the elements that passed the test
      */
     public static <I> List<I> reject(final Iterable<I> base, final Function<I, Boolean> test) {
-        return null;
+        final var result = new ArrayList<I>();
+        for (final I input : base) {
+           if(!test.call(input)){
+            result.add(input);
+           }
+        }
+        return result;  
     }
 }
