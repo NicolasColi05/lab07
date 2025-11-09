@@ -5,6 +5,9 @@ import it.unibo.bank.api.BankAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -16,20 +19,25 @@ class TestStrictBankAccount {
     private AccountHolder mRossi;
     private BankAccount bankAccount;
 
+
     /**
      * Prepare the tests.
      */
     @BeforeEach
     public void setUp() {
-        fail("To be implemented");
+        this.mRossi = new AccountHolder("Mario", "Rossi", 1);
+        this.bankAccount = new StrictBankAccount(mRossi, 0.0);
     }
 
     /**
      * Test the initial state of the StrictBankAccount.
      */
     @Test
-    public void testInitialization() {
-        fail("To be implemented");
+    public void testInitialization() { 
+        assertEquals(0.0 , bankAccount.getBalance());
+        assertEquals(mRossi , bankAccount.getAccountHolder());
+        assertEquals(0 , bankAccount.getTransactionsCount());
+
     }
 
     /**
@@ -37,7 +45,11 @@ class TestStrictBankAccount {
      */
     @Test
     public void testManagementFees() {
-        fail("To be implemented");
+        bankAccount.deposit(bankAccount.getAccountHolder().getUserID(), 100);
+        assertEquals(1, bankAccount.getTransactionsCount());
+        assertEquals(100, bankAccount.getBalance());
+        bankAccount.chargeManagementFees(mRossi.getUserID());
+        assertEquals(100 - 0.1 - 5 , bankAccount.getBalance());
     }
 
     /**
@@ -45,7 +57,15 @@ class TestStrictBankAccount {
      */
     @Test
     public void testNegativeWithdraw() {
-        fail("To be implemented");
+        int count = 0;
+        try {
+            bankAccount.withdraw(mRossi.getUserID(), -1000);
+        } catch (IllegalArgumentException e) {
+            count++;
+        }
+        assertEquals(1, count);
+       
+       
     }
 
     /**
@@ -53,6 +73,12 @@ class TestStrictBankAccount {
      */
     @Test
     public void testWithdrawingTooMuch() {
-        fail("To be implemented");
+        int count = 0;
+        try {
+            bankAccount.withdraw(mRossi.getUserID(), 1000);
+        } catch (IllegalArgumentException e) {
+            count++;
+        }
+        assertEquals(1, count);
     }
 }
